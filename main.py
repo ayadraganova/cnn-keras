@@ -1,16 +1,38 @@
-# This is a sample Python script.
+import tensorflow as tf
 
-# Press Umschalt+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import matplotlib.pyplot as plt
+from keras.models import Sequential
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+# initializing the cnn
+classifier = Sequential()
+
+train_path = 'train'
+test_path = 'test'
+
+train_batches = ImageDataGenerator(
+    preprocessing_function=tf.keras.applications.vgg16.preprocess_input).flow_from_directory(directory=train_path,
+                                                                                             target_size=(224, 224),
+                                                                                             classes=['cat', 'dog'],
+                                                                                             batch_size=10)
+test_batches = ImageDataGenerator(
+    preprocessing_function=tf.keras.applications.vgg16.preprocess_input).flow_from_directory(directory=test_path,
+                                                                                             target_size=(224, 224),
+                                                                                             classes=['cat', 'dog'],
+                                                                                             batch_size=10)
+
+imgs, labels = next(train_batches)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Strg+F8 to toggle the breakpoint.
+def plotImages(images_arr):
+    fig, axes = plt.subplots(1, 10, figsize=(20, 20))
+    axes = axes.flatten()
+    for img, ax in zip(images_arr, axes):
+        ax.imshow(img)
+        ax.axis('off')
+    plt.tight_layout()
+    plt.show()
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+plotImages(imgs)
+print(labels)
