@@ -11,14 +11,22 @@ from sklearn.metrics import confusion_matrix
 '''
 Preparing Test & Training data
 '''
-train_path = 'train'
-test_path = 'test'
+train_path = 'data/train'
+valid_path = 'data/valid'
+test_path = 'data/test'
 
 train_batches = ImageDataGenerator(
     preprocessing_function=tf.keras.applications.vgg16.preprocess_input).flow_from_directory(directory=train_path,
                                                                                              target_size=(224, 224),
                                                                                              classes=['cat', 'dog'],
                                                                                              batch_size=10)
+
+valid_batches = ImageDataGenerator(
+    preprocessing_function=tf.keras.applications.vgg16.preprocess_input).flow_from_directory(directory=valid_path,
+                                                                                             target_size=(224, 224),
+                                                                                             classes=['cat', 'dog'],
+                                                                                             batch_size=10)
+
 test_batches = ImageDataGenerator(
     preprocessing_function=tf.keras.applications.vgg16.preprocess_input).flow_from_directory(directory=test_path,
                                                                                              target_size=(224, 224),
@@ -28,7 +36,7 @@ test_batches = ImageDataGenerator(
 imgs, labels = next(train_batches)
 
 
-def plotImages(images_arr):
+def plot_images(images_arr):
     fig, axes = plt.subplots(1, 10, figsize=(20, 20))
     axes = axes.flatten()
     for img, ax in zip(images_arr, axes):
@@ -38,7 +46,7 @@ def plotImages(images_arr):
     plt.show()
 
 
-# plotImages(imgs)
+# plot_images(imgs)
 # print(labels)
 
 '''
@@ -54,13 +62,13 @@ model = Sequential(
 
 model.summary()
 model.compile(optimizer=Adam(learning_rate=0.0001), loss='categorical_crossentropy', metrics=['accuracy'])
-model.fit(x=train_batches, epochs=10, verbose=2)
+model.fit(x=train_batches, validation_data=valid_batches, epochs=10, verbose=2)
 
 '''
 Predict
 '''
 test_imgs, test_labels = next(test_batches)
-plotImages(test_imgs)
+plot_images(test_imgs)
 print(test_labels)
 test_batches.classes
 

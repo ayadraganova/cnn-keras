@@ -1,7 +1,8 @@
 # cnn-keras
 
-This project is using Keras, a neural network API written in Python and integrated with TensorFlow, to classify dogs and cats.
-It is build and trained on convolutional neural networks (CNNs)
+This project is using Keras, a neural network API written in Python and integrated with TensorFlow, 
+to predict cats and dog image data.
+It is build and trained on convolutional neural networks (CNNs).
 
 ## Prepare and Process Data 
 
